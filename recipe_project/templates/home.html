@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .top-actions{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        flex-wrap:wrap;
+        margin-bottom:30px;
+        gap:15px;
+    }
+
+    .action-buttons{
+        display:flex;
+        gap:15px;
+    }
+
+    .action-buttons a{
+        text-decoration:none;
+        background:#94da52;
+        color:white;
+        padding:12px 22px;
+        border-radius:12px;
+        font-weight:600;
+        transition:0.3s;
+        box-shadow:0 5px 12px rgba(0,0,0,0.1);
+    }
+
+    .action-buttons a:hover{
+        background:goldenrod;
+        transform:translateY(-2px);
+    }
+
+    /* SEARCH BAR */
+
+    .search-form{
+        display:flex;
+        gap:10px;
+        margin-bottom:40px;
+        flex-wrap:wrap;
+    }
+
+    .search-form input{
+        flex:1;
+        min-width:250px;
+        padding:14px;
+        border:none;
+        border-radius:12px;
+        outline:none;
+        background:white;
+        box-shadow:0 4px 10px rgba(0,0,0,0.08);
+        font-size:15px;
+    }
+
+    .search-form input:focus{
+        border:2px solid #37d928;
+    }
+
+    .search-form button{
+        padding:14px 24px;
+        border:none;
+        border-radius:12px;
+        background:#94da52;
+        color:white;
+        font-weight:bold;
+        cursor:pointer;
+        transition:0.3s;
+    }
+
+    .search-form button:hover{
+        background:goldenrod;
+    }
+
+    /* RECIPE GRID */
+
+    .recipe-container{
+        display:grid;
+        grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+        gap:30px;
+    }
+
+    .recipe-card{
+        background:white;
+        border-radius:20px;
+        overflow:hidden;
+        box-shadow:0 10px 25px rgba(0,0,0,0.08);
+        transition:0.3s;
+    }
+
+    .recipe-card:hover{
+        transform:translateY(-5px);
+    }
+
+    .recipe-card img{
+        width:100%;
+        height:230px;
+        object-fit:cover;
+    }
+
+    .recipe-content{
+        padding:20px;
+    }
+
+    .uploaded-by{
+        color:gray;
+        font-size:14px;
+        margin-bottom:10px;
+    }
+
+    .recipe-title{
+        font-size:24px;
+        color:#2f4f2f;
+        margin-bottom:10px;
+    }
+
+    .recipe-category{
+        display:inline-block;
+        background:#ece579;
+        color:#444;
+        padding:6px 14px;
+        border-radius:20px;
+        font-size:14px;
+        margin-bottom:20px;
+    }
+
+    .view-btn{
+        display:inline-block;
+        text-decoration:none;
+        background:#94da52;
+        color:white;
+        padding:12px 20px;
+        border-radius:10px;
+        font-weight:bold;
+        transition:0.3s;
+    }
+
+    .view-btn:hover{
+        background:goldenrod;
+    }
+
+</style>
+
+<!-- TOP BUTTONS -->
+
+<div class="top-actions">
+
+    <h1 style="color:#2f4f2f;">
+        Explore Recipes
+    </h1>
+
+    <div class="action-buttons">
+
+        <a href="/profile/">
+            Profile
+        </a>
+
+        <a href="/add_recipe/">
+            Add Recipe
+        </a>
+
+    </div>
+
+</div>
+
+<!-- SEARCH BAR -->
+
+<form method="GET" class="search-form">
+
+    <input type="text"
+           name="q"
+           placeholder="Search delicious recipes...">
+
+    <button type="submit">
+        Search
+    </button>
+
+</form>
+
+<!-- RECIPE CARDS -->
+
+<div class="recipe-container">
+
+{% for recipe in recipes %}
+
+    <div class="recipe-card">
+
+        <img src="{{ recipe.image.url }}">
+
+        <div class="recipe-content">
+
+            <p class="uploaded-by">
+                Uploaded by <b>{{ recipe.user.username }}</b>
+            </p>
+
+            <h2 class="recipe-title">
+                {{ recipe.title }}
+            </h2>
+
+            <p class="recipe-category">
+                {{ recipe.category }}
+            </p>
+
+            <br>
+
+            <a href="/recipe/{{ recipe.id }}/"
+               class="view-btn">
+               View Recipe
+            </a>
+
+        </div>
+
+    </div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

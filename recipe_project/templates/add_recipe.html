@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .add-recipe-container{
+        width:100%;
+        min-height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        padding:40px 20px;
+    }
+
+    .add-recipe-card{
+        width:100%;
+        max-width:650px;
+        background:white;
+        padding:45px;
+        border-radius:25px;
+        box-shadow:0 15px 35px rgba(0,0,0,0.12);
+        animation:fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn{
+        from{
+            opacity:0;
+            transform:translateY(20px);
+        }
+        to{
+            opacity:1;
+            transform:translateY(0);
+        }
+    }
+
+    .add-recipe-card h2{
+        text-align:center;
+        font-size:36px;
+        color:#2f4f2f;
+        margin-bottom:10px;
+    }
+
+    .subtitle{
+        text-align:center;
+        color:gray;
+        margin-bottom:35px;
+        font-size:15px;
+    }
+
+    form p{
+        margin-bottom:22px;
+    }
+
+    form label{
+        display:block;
+        margin-bottom:8px;
+        font-weight:600;
+        color:#444;
+    }
+
+    form input,
+    form textarea,
+    form select{
+        width:100%;
+        padding:14px;
+        border:1px solid #ddd;
+        border-radius:12px;
+        outline:none;
+        font-size:15px;
+        background:#fafafa;
+        transition:0.3s;
+    }
+
+    form textarea{
+        min-height:140px;
+        resize:vertical;
+    }
+
+    form input:focus,
+    form textarea:focus,
+    form select:focus{
+        border-color:#37d928;
+        box-shadow:0 0 10px rgba(55,217,40,0.2);
+        background:white;
+    }
+
+    input[type="file"]{
+        background:white;
+        padding:10px;
+    }
+
+    .upload-btn{
+        width:100%;
+        padding:15px;
+        border:none;
+        border-radius:12px;
+        background:#94da52;
+        color:white;
+        font-size:17px;
+        font-weight:bold;
+        cursor:pointer;
+        transition:0.3s;
+        margin-top:10px;
+    }
+
+    .upload-btn:hover{
+        background:goldenrod;
+        transform:translateY(-2px);
+    }
+
+</style>
+
+<div class="add-recipe-container">
+
+    <div class="add-recipe-card">
+
+        <h2>Add New Recipe</h2>
+
+        <p class="subtitle">
+            Share your delicious recipe with everyone
+        </p>
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="upload-btn">
+                Upload Recipe
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

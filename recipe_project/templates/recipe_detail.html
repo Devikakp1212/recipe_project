@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+    .recipe-detail-container{
+        max-width:1000px;
+        margin:auto;
+        padding:30px 20px;
+    }
+
+    .recipe-detail-card{
+        background:white;
+        border-radius:25px;
+        overflow:hidden;
+        box-shadow:0 15px 35px rgba(0,0,0,0.12);
+        animation:fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn{
+        from{
+            opacity:0;
+            transform:translateY(20px);
+        }
+        to{
+            opacity:1;
+            transform:translateY(0);
+        }
+    }
+
+    .recipe-image{
+        width:100%;
+        height:450px;
+        object-fit:cover;
+    }
+
+    .recipe-content{
+        padding:35px;
+    }
+
+    .uploaded-by{
+        color:gray;
+        margin-bottom:10px;
+        font-size:15px;
+    }
+
+    .recipe-title{
+        font-size:42px;
+        color:#2f4f2f;
+        margin-bottom:15px;
+    }
+
+    .rating-box{
+        display:inline-block;
+        background:#ece579;
+        padding:10px 18px;
+        border-radius:30px;
+        font-weight:bold;
+        margin-bottom:20px;
+        color:#444;
+    }
+
+    .section-title{
+        font-size:24px;
+        color:#2f4f2f;
+        margin-top:25px;
+        margin-bottom:12px;
+    }
+
+    .recipe-text{
+        color:#555;
+        line-height:1.8;
+        font-size:16px;
+    }
+
+    .like-section{
+        display:flex;
+        gap:15px;
+        align-items:center;
+        flex-wrap:wrap;
+        margin-top:25px;
+    }
+
+    .like-count{
+        font-weight:bold;
+        color:#444;
+    }
+
+    .action-btn{
+        text-decoration:none;
+        background:#94da52;
+        color:white;
+        padding:12px 22px;
+        border-radius:12px;
+        font-weight:bold;
+        transition:0.3s;
+    }
+
+    .action-btn:hover{
+        background:goldenrod;
+    }
+
+    video{
+        width:100%;
+        border-radius:20px;
+        margin-top:30px;
+    }
+
+    hr{
+        margin:40px 0;
+        border:none;
+        border-top:1px solid #ddd;
+    }
+
+    .comment-box{
+        background:#f8fdf2;
+        padding:15px 20px;
+        border-radius:15px;
+        margin-bottom:15px;
+    }
+
+    .comment-user{
+        color:#2f4f2f;
+        font-weight:bold;
+        margin-bottom:5px;
+    }
+
+    form{
+        margin-top:30px;
+    }
+
+    form p{
+        margin-bottom:20px;
+    }
+
+    form label{
+        display:block;
+        margin-bottom:8px;
+        font-weight:600;
+        color:#444;
+    }
+
+    form input,
+    form textarea,
+    form select{
+        width:100%;
+        padding:14px;
+        border:1px solid #ddd;
+        border-radius:12px;
+        outline:none;
+        background:#fafafa;
+        font-size:15px;
+        transition:0.3s;
+    }
+
+    form textarea{
+        min-height:120px;
+        resize:vertical;
+    }
+
+    form input:focus,
+    form textarea:focus,
+    form select:focus{
+        border-color:#37d928;
+        box-shadow:0 0 10px rgba(55,217,40,0.2);
+        background:white;
+    }
+
+    .submit-btn{
+        width:100%;
+        padding:15px;
+        border:none;
+        border-radius:12px;
+        background:#94da52;
+        color:white;
+        font-size:16px;
+        font-weight:bold;
+        cursor:pointer;
+        transition:0.3s;
+        margin-bottom:15px;
+    }
+
+    .submit-btn:hover{
+        background:goldenrod;
+    }
+
+</style>
+
+<div class="recipe-detail-container">
+
+    <div class="recipe-detail-card">
+
+        <img src="{{ recipe.image.url }}"
+             class="recipe-image">
+
+        <div class="recipe-content">
+
+            <p class="uploaded-by">
+                Uploaded by :
+                <b>{{ recipe.user.username }}</b>
+            </p>
+
+            <h1 class="recipe-title">
+                {{ recipe.title }}
+            </h1>
+
+            <div class="rating-box">
+                ⭐ Average Rating :
+                {{ avg_rating.rating__avg|default:"0" }}/5
+            </div>
+
+            <h3 class="section-title">
+                Ingredients
+            </h3>
+
+            <p class="recipe-text">
+                {{ recipe.ingredients }}
+            </p>
+
+            <h3 class="section-title">
+                Instructions
+            </h3>
+
+            <p class="recipe-text">
+                {{ recipe.instructions }}
+            </p>
+
+            <div class="like-section">
+
+                <p class="like-count">
+                    ❤️ Likes : {{ recipe.likes.count }}
+                </p>
+
+                <a href="/like/{{ recipe.id }}/"
+                   class="action-btn">
+                    Like
+                </a>
+
+                <a href="/favorite/{{ recipe.id }}/"
+                   class="action-btn">
+                    Save Favorite
+                </a>
+
+            </div>
+
+            {% if recipe.video %}
+
+            <video controls>
+                <source src="{{ recipe.video.url }}">
+            </video>
+
+            {% endif %}
+
+            <hr>
+
+            <h2 class="section-title">
+                Comments
+            </h2>
+
+            {% for comment in comments %}
+
+            <div class="comment-box">
+
+                <p class="comment-user">
+                    {{ comment.user }}
+                </p>
+
+                <p>
+                    {{ comment.text }}
+                </p>
+
+            </div>
+
+            {% empty %}
+
+            <p style="color:gray;">
+                No comments yet.
+            </p>
+
+            {% endfor %}
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                {{ comment_form.as_p }}
+
+                <button type="submit"
+                        name="comment_submit"
+                        class="submit-btn">
+
+                    Post Comment
+
+                </button>
+
+                {{ rating_form.as_p }}
+
+                <button type="submit"
+                        name="rating_submit"
+                        class="submit-btn">
+
+                    Submit Rating
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
