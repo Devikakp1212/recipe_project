@@ -8,6 +8,7 @@ from .forms import *
 from django.db.models import Avg
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def home(request):
@@ -40,8 +41,9 @@ def user_login(request):
             return redirect('home')
 
     return render(request, 'login.html')
-def user_logout(request):
+def logout_view(request):
     logout(request)
+    messages.success(request, "Logout successful!")
     return redirect('home')
 def register(request):
     form = RegisterForm()

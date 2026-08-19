@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<a href="{% url 'home' %}" class="home-btn">Home</a>
 
 <style>
 
@@ -145,6 +146,20 @@
         border:none;
         border-top:1px solid #ddd;
     }
+    .home-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #12a83f;
+    color: rgb(242, 242, 247);
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.home-btn:hover {
+    background-color: #62f162;
+}
+
 
 </style>
 
